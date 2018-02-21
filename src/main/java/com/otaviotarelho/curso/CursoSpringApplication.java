@@ -13,6 +13,7 @@ import com.otaviotarelho.curso.domain.Cidade;
 import com.otaviotarelho.curso.domain.Cliente;
 import com.otaviotarelho.curso.domain.Endereco;
 import com.otaviotarelho.curso.domain.Estado;
+import com.otaviotarelho.curso.domain.ItemPedido;
 import com.otaviotarelho.curso.domain.Pagamento;
 import com.otaviotarelho.curso.domain.PagamentoComBoleto;
 import com.otaviotarelho.curso.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.otaviotarelho.curso.repositories.CidadeRepository;
 import com.otaviotarelho.curso.repositories.ClienteRepository;
 import com.otaviotarelho.curso.repositories.EnderecoRepository;
 import com.otaviotarelho.curso.repositories.EstadoRepository;
+import com.otaviotarelho.curso.repositories.ItemPedidoRepository;
 import com.otaviotarelho.curso.repositories.PagamentoRepository;
 import com.otaviotarelho.curso.repositories.PedidoRespository;
 import com.otaviotarelho.curso.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CursoSpringApplication implements CommandLineRunner {
 	private PagamentoRepository pagamentoRepository;
 	@Autowired 
 	private PedidoRespository pedidoRespository;
+	@Autowired 
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursoSpringApplication.class, args);
@@ -111,6 +115,18 @@ public class CursoSpringApplication implements CommandLineRunner {
 		pedidoRespository.save(Arrays.asList(ped1,ped2));
 		pagamentoRepository.save(Arrays.asList(pg1,pg2));
 		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00D, 1, 2000.00D);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00D, 1, 80.00D);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100D, 1, 500.00D);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.save(Arrays.asList(ip1,ip2,ip3));
 		
 	}
 }
