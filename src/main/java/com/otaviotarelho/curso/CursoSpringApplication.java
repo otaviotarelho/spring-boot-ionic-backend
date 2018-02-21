@@ -110,7 +110,7 @@ public class CursoSpringApplication implements CommandLineRunner {
 		ped1.setPagamento(pg1);
 		ped2.setPagamento(pg2);
 		
-		cliente.getPedido().addAll(Arrays.asList(ped1,ped2));
+		cliente.getPedidos().addAll(Arrays.asList(ped1,ped2));
 		
 		pedidoRespository.save(Arrays.asList(ped1,ped2));
 		pagamentoRepository.save(Arrays.asList(pg1,pg2));
