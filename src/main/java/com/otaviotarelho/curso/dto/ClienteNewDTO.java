@@ -2,21 +2,42 @@ package com.otaviotarelho.curso.dto;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.otaviotarelho.curso.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message="Preenchimento do Nome obrigatório.")
+	@Length(min=5, max=120, message="O tamanho do nome deve ser entre 5 e 120 caracteres")
 	private String nome;
+	
+	@NotEmpty(message="Preenchimento do E-mail obrigatório.")
+	@Email(message="E-mail inválido")
 	private String email;
+	
+	@NotEmpty(message="Preenchimento do CPF/CNPJ obrigatório.")
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	@NotEmpty(message="Preenchimento do Logradouro obrigatório.")
 	private String logradouro;
+	
+	@NotEmpty(message="Preenchimento do Número obrigatório.")
 	private String numero;
 	private String complemento;
 	private String bairro;
+	
+	@NotEmpty(message="Preenchimento do CEP obrigatório.")
 	private String cep;
 	
+	@NotEmpty(message="Preenchimento do Telefone obrigatório.")
 	private String telefone1;
+	
 	private String telefone2;
 	private String telefone3;
 	
