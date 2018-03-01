@@ -9,6 +9,7 @@ import com.otaviotarelho.curso.domain.ItemPedido;
 import com.otaviotarelho.curso.domain.PagamentoComBoleto;
 import com.otaviotarelho.curso.domain.Pedido;
 import com.otaviotarelho.curso.domain.enums.EstadoPagamento;
+import com.otaviotarelho.curso.repositories.ClienteRepository;
 import com.otaviotarelho.curso.repositories.ItemPedidoRepository;
 import com.otaviotarelho.curso.repositories.PagamentoRepository;
 import com.otaviotarelho.curso.repositories.PedidoRespository;
@@ -33,6 +34,9 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
 	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
 	public Pedido find(Integer id) {
 		Pedido obj = repo.findOne(id);
 		
@@ -48,6 +52,7 @@ public class PedidoService {
 		obj.setInstante(new Date());
 		obj.getPagamento().setEstado(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
+		obj.setCliente(clienteRepository.findOne(obj.getCliente().getId()));
 		if(obj.getPagamento() instanceof PagamentoComBoleto) {
 			PagamentoComBoleto pagto = (PagamentoComBoleto) obj.getPagamento();
 			boletoService.preencherPagamentoComBoleto(pagto, obj.getInstante());
@@ -58,12 +63,13 @@ public class PedidoService {
 		
 		for(ItemPedido item : obj.getItens()) {
 			item.setDesconto(0.00);
-			item.setPreco(produtoRepository.findOne(item.getProduto().getId()).getPreco());
+			item.setProduto(produtoRepository.findOne(item.getProduto().getId()));
+			item.setPreco(item.getProduto().getPreco());
 			item.setPedido(obj);
 		}
 		
 		itemPedidoRepository.save(obj.getItens());
-		
+		System.out.println(obj.toString());
 		return obj;
 	}
 }

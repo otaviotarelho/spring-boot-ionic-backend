@@ -1,8 +1,11 @@
 package com.otaviotarelho.curso.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -134,6 +137,31 @@ public class Pedido implements Serializable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat sdFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido número")
+		.append(id)
+		.append(", Instante: ")
+		.append(sdFormat.format(instante))
+		.append(", Cliente: ")
+		.append(cliente.getNome())
+		.append(", Situação Pagamento ")
+		.append(pagamento.getEstado().getDescricao())
+		.append("\nDetalhes:\n");
+		
+		for(ItemPedido item : itens) {
+			builder.append(item.toString());
+		}
+		
+		builder.append("\nValor Total:")
+		.append(numberFormat.format(getValorTotal()));
+		
+		return builder.toString();
 	}
 	
 	
