@@ -20,6 +20,7 @@ import com.otaviotarelho.curso.domain.PagamentoComCartao;
 import com.otaviotarelho.curso.domain.Pedido;
 import com.otaviotarelho.curso.domain.Produto;
 import com.otaviotarelho.curso.domain.enums.EstadoPagamento;
+import com.otaviotarelho.curso.domain.enums.Perfil;
 import com.otaviotarelho.curso.domain.enums.TipoCliente;
 import com.otaviotarelho.curso.repositories.CategoriaRepository;
 import com.otaviotarelho.curso.repositories.CidadeRepository;
@@ -113,14 +114,20 @@ public class DatabaseService {
 		
 		
 		Cliente cliente = new Cliente(null, "Maria Silva", "otarelho@ucdavis.edu", "11111111111", TipoCliente.PESSOAFISICA, passwordEncoder.encode("teste123"));
+		Cliente cliente2 = new Cliente(null, "Otavio Tarelho", "otaviortdb@gmail.com", "34136362609", TipoCliente.PESSOAFISICA, passwordEncoder.encode("teste123"));
+		cliente2.addPerfis(Perfil.ADMIN);
+		
 		cliente.getTelefones().addAll(Arrays.asList("123244356", "2423543535"));
+		cliente2.getTelefones().addAll(Arrays.asList("123244356", "2423543535"));
 		
 		Endereco end1 = new Endereco(null, "Rua Maria do Carmo", "445", "Casa 02", "Jardim Casqueir", "11533050", cliente, c2);
 		Endereco end2 = new Endereco(null, "Av Ana Costa", "255", "Mezanino", "Gonzaga", "11060001", cliente, c2);
+		Endereco end3 = new Endereco(null, "Av Ana Costa", "255", "10 Andar", "Gonzaga", "11060001", cliente2, c2);
 		
 		cliente.getEnderecos().addAll(Arrays.asList(end1,end2));
+		cliente2.getEnderecos().addAll(Arrays.asList(end3));
 		
-		cienteRepository.save(Arrays.asList(cliente));
+		cienteRepository.save(Arrays.asList(cliente, cliente2));
 		enderecoRepository.save(Arrays.asList(end1, end2));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
