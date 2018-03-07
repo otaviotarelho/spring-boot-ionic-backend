@@ -13,12 +13,15 @@ import org.springframework.stereotype.Service;
 import com.otaviotarelho.curso.domain.Cidade;
 import com.otaviotarelho.curso.domain.Cliente;
 import com.otaviotarelho.curso.domain.Endereco;
+import com.otaviotarelho.curso.domain.enums.Perfil;
 import com.otaviotarelho.curso.domain.enums.TipoCliente;
 import com.otaviotarelho.curso.dto.ClienteDTO;
 import com.otaviotarelho.curso.dto.ClienteNewDTO;
 import com.otaviotarelho.curso.repositories.CidadeRepository;
 import com.otaviotarelho.curso.repositories.ClienteRepository;
 import com.otaviotarelho.curso.repositories.EnderecoRepository;
+import com.otaviotarelho.curso.security.UserSpringSecurity;
+import com.otaviotarelho.curso.services.exceptions.AuthorizationException;
 import com.otaviotarelho.curso.services.exceptions.DataIntegrityException;
 import com.otaviotarelho.curso.services.exceptions.ObjectNotFoundException;
 
@@ -38,6 +41,13 @@ public class ClienteService {
 	private BCryptPasswordEncoder passwordEnconder;
 	
 	public Cliente find(Integer id) {
+		
+		UserSpringSecurity user = UserService.authenticated();
+		
+		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
 		Cliente obj = repo.findOne(id);
 		
 		if(obj == null) {
