@@ -56,8 +56,8 @@ public class CategoriaService {
 	}
 	
 	public Page<Categoria> findPage(Integer page, Integer linePerPage, String orderBy, String direction){
-		PageRequest pageResquest = new PageRequest(page, linePerPage, Direction.valueOf(direction), orderBy);
-		return repo.findAll(pageResquest);
+		PageRequest pageRequest = new PageRequest(page, linePerPage, Direction.valueOf(direction), orderBy);
+		return repo.findAll(pageRequest);
 	}
 	
 	public Categoria formDTO(CategoriaDTO objDTO) {

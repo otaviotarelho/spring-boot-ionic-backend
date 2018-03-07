@@ -3,8 +3,12 @@ package com.otaviotarelho.curso.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.otaviotarelho.curso.domain.Cliente;
 import com.otaviotarelho.curso.domain.ItemPedido;
 import com.otaviotarelho.curso.domain.PagamentoComBoleto;
 import com.otaviotarelho.curso.domain.Pedido;
@@ -14,6 +18,8 @@ import com.otaviotarelho.curso.repositories.ItemPedidoRepository;
 import com.otaviotarelho.curso.repositories.PagamentoRepository;
 import com.otaviotarelho.curso.repositories.PedidoRespository;
 import com.otaviotarelho.curso.repositories.ProdutoRepository;
+import com.otaviotarelho.curso.security.UserSpringSecurity;
+import com.otaviotarelho.curso.services.exceptions.AuthorizationException;
 import com.otaviotarelho.curso.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -76,5 +82,19 @@ public class PedidoService {
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		
 		return obj;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linePerPage, String orderBy, String direction){
+		
+		UserSpringSecurity user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Acesso Negado");
+		}
+		
+		PageRequest pageRequest = new PageRequest(page, linePerPage, Direction.valueOf(direction), orderBy);
+		
+		Cliente cliente = clienteRepository.findOne(user.getId());
+		
+		return repo.findByCliente(cliente, pageRequest);
 	}
 }
