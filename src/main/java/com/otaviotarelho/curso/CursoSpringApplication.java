@@ -19,6 +19,6 @@ public class CursoSpringApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... arg0) throws Exception {
-		s3Service.uploadile("/Users/otaviortbarros/Downloads/s2notx.jpg");
+		//s3Service.uploadile("/Users/otaviortbarros/Downloads/s2notx.jpg");
 	}
 }
